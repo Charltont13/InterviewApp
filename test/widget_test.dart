@@ -1,30 +1,57 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:flutter_app/main.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  testWidgets('Start interview button test', (WidgetTester tester) async {
+    await tester.pumpWidget(const MaterialApp(home: MockInterviewScreen()));
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    //Verify that the Start Interview button is present
+    expect(find.text('Start Interview'), findsOneWidget);
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
+    //Start Interview button check
+    await tester.tap(find.text('Start Interview'));
     await tester.pump();
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    //Verify that the question dialog is shown after tapping the Start Interview button
+    expect(find.byType(AlertDialog), findsOneWidget);
+  });
+
+  testWidgets('Question dialog test', (WidgetTester tester) async {
+    await tester.pumpWidget(const MaterialApp(home: MockInterviewScreen()));
+
+    //Start Interview button check
+    await tester.tap(find.text('Start Interview'));
+    await tester.pump();
+
+    //Verify that the question dialog shows the first question
+    expect(find.text('Question 1'), findsOneWidget);
+    expect(find.text('Tell me about yourself.'), findsOneWidget);
+
+    //Tap on the Next button in the question dialog
+    await tester.tap(find.text('Next'));
+    await tester.pump();
+
+    //Check that the next question is shown in the dialog
+    expect(find.text('Question 2'), findsOneWidget);
+  });
+
+  testWidgets('Interview end dialog test', (WidgetTester tester) async {
+    await tester.pumpWidget(const MaterialApp(home: MockInterviewScreen()));
+
+    //Start Interview button check
+    await tester.tap(find.text('Start Interview'));
+    await tester.pump();
+
+    //Answer all questions
+    for (int i = 0; i < 15; i++) {
+      await tester.tap(find.text('Next'));
+      await tester.pump();
+    }
+
+    // Verify that the interview end dialog is shown after answering all questions
+    expect(find.text('Interview Over'), findsOneWidget);
+    expect(find.text('You have answered all questions.'), findsOneWidget);
   });
 }
