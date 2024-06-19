@@ -6,7 +6,7 @@ A program made to simulate a job interview process.
 git clone https://github.com/your-username/flutter_app.git
 cd flutter_app
 
-Install dependencies
+Install dependencies with
 flutter pub get
 
 ## Getting Started
