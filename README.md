@@ -1,4 +1,4 @@
-# Flutter_app
+# Interview App
 
 A program made to simulate a job interview process.
 
